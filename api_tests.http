@@ -1,0 +1,86 @@
+### Pruebas de la API de videojuegos
+### Requiere la extension "REST Client" de VS Code (humao.rest-client).
+### Con el servidor corriendo (python app.py), haz clic en "Send Request" sobre cada peticion.
+
+@base = http://127.0.0.1:5000/api
+
+### 1. Listar juegos -> 200 OK
+GET {{base}}/juegos
+
+### 2. Crear juego -> 201 Created (revisa la cabecera Location)
+POST {{base}}/juegos
+Content-Type: application/json
+
+{
+  "titulo": "The Legend of Zelda: Breath of the Wild",
+  "genero": "Aventura",
+  "plataforma": "Nintendo Switch",
+  "anio": 2017,
+  "precio": 1299.0
+}
+
+### 3. Crear otro juego -> 201 Created
+POST {{base}}/juegos
+Content-Type: application/json
+
+{
+  "titulo": "Hollow Knight",
+  "genero": "Metroidvania",
+  "plataforma": "PC",
+  "anio": 2017,
+  "precio": 150.5
+}
+
+### 4. Obtener un juego -> 200 OK
+GET {{base}}/juegos/1
+
+### 5. Modificar un juego -> 200 OK
+PUT {{base}}/juegos/1
+Content-Type: application/json
+
+{
+  "precio": 999.0,
+  "plataforma": "Nintendo Switch / Wii U"
+}
+
+### 6. Eliminar un juego -> 204 No Content
+DELETE {{base}}/juegos/1
+
+### 7. ERROR 404: juego que no existe
+GET {{base}}/juegos/999
+
+### 8. ERROR 404: eliminar uno que no existe
+DELETE {{base}}/juegos/999
+
+### 9. ERROR 400: faltan campos obligatorios
+POST {{base}}/juegos
+Content-Type: application/json
+
+{
+  "titulo": "Juego incompleto"
+}
+
+### 10. ERROR 400: tipo de dato invalido (anio no es numero)
+POST {{base}}/juegos
+Content-Type: application/json
+
+{
+  "titulo": "Juego raro",
+  "genero": "Accion",
+  "plataforma": "PC",
+  "anio": "dos mil"
+}
+
+### 11. ERROR 400: titulo vacio en PUT
+PUT {{base}}/juegos/2
+Content-Type: application/json
+
+{
+  "titulo": "   "
+}
+
+### 12. ERROR 405: metodo no permitido (PUT sobre la coleccion)
+PUT {{base}}/juegos
+Content-Type: application/json
+
+{}
